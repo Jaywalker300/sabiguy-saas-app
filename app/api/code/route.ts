@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import Configuration from "openai"
+
 import OpenAIApi from "openai"
 import { auth } from "@clerk/nextjs"
 import { ChatCompletionMessage } from "openai/resources/index.mjs"
@@ -8,9 +8,9 @@ import { increaseApiLimit, checkApiLimit } from "@/lib/api-limit"
 
 
 
-const configuration = new Configuration({apiKey: process.env.OPENAI_SECRET_KEY,})
 
-const openai = new OpenAIApi(configuration)
+
+const openai = new OpenAIApi({apiKey: process.env.OPENAI_SECRET_KEY,})
 
 const instructionMessage : ChatCompletionMessage ={
     role: "system",
@@ -28,7 +28,7 @@ export async function POST(
         if(!userId){
         return new NextResponse("unauthorized", {status:401})}
 
-        if(!configuration.apiKey){
+        if(!openai){
             return new NextResponse("Api key not configured", {status:500})
         }
 
